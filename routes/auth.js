@@ -5,6 +5,7 @@ const User = require('../models/User');
 const bcrypt = require('bcrypt');
 const passport = require('passport');
 const sendWelcomeMail = require('../helpers/mailer').sendWelcomeMail;
+<<<<<<< HEAD
 
 function isAuthenticated(req, res, next) {
 	if (req.isAuthenticated()) {
@@ -13,6 +14,18 @@ function isAuthenticated(req, res, next) {
 	} else {
 		res.redirect('/login');
 	}
+=======
+const sendTemplate = require('../helpers/mailer').sendTemplate;
+
+
+function isAuthenticated(req,res,next){
+    if(req.isAuthenticated()){
+        console.log(req.user)
+        return next()
+    }else{
+        res.redirect('/login');
+    }
+>>>>>>> 27d5ec37c8e6cf1ebf669522585fb811e6b6447d
 }
 
 function isLoggedIn(req, res, next) {
@@ -79,6 +92,7 @@ router.get('/signup', (req, res) => {
 //1 crear la ruta post (recibe)
 //2 necesitamos chear las contraseñas que coincidan
 //3 crear al usuario en la db
+<<<<<<< HEAD
 router.post('/signup', (req, res, next) => {
 	User.register(req.body, req.body.password)
 		.then((user) => {
@@ -98,5 +112,29 @@ router.post('/signup', (req, res, next) => {
 	// .then(user=>res.send(user))
 	// .catch(e=>next(e))
 });
+=======
+router.post('/signup', (req,res,next)=>{
+
+    User.register(req.body, req.body.password)
+    .then(user=>{
+        sendTemplate(user);
+        res.redirect('/login')
+    })
+    .catch(e=>next(e));
+
+
+    // if(req.body.password !== req.body.password2){
+    //     req.body.error = 'escribe bien la contraseña!';
+    //     return res.render('auth/signup', req.body)
+    // }
+    // //encriptar la contraseña
+    // const hash = bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(10));
+    // req.body.password = hash;
+    // User.create(req.body)
+    // .then(user=>res.send(user))
+    // .catch(e=>next(e))
+})
+
+>>>>>>> 27d5ec37c8e6cf1ebf669522585fb811e6b6447d
 
 module.exports = router;
